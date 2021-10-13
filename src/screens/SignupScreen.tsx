@@ -1,18 +1,57 @@
-import React from 'react';
-import { View, StyleSheet, Text, Button } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  View,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Animated,
+  Easing,
+} from 'react-native';
+import { Text, Input, Button } from 'react-native-elements';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Auth = createNativeStackNavigator();
 
 const SignupScreen = ({ navigation }: { navigation: any }) => {
+  const [userIsTyping, setUserIsTyping] = useState(false);
+
+  const [translation] = useState(new Animated.Value(0));
+
+  const translateY = (y: number) => {
+    Animated.timing(translation, {
+      toValue: y,
+      duration: 500,
+      easing: Easing.out(Easing.exp),
+      useNativeDriver: true,
+    }).start();
+  };
+
   return (
-    <View style={styles.signUpView}>
-      <Button
-        title="Already have an account? Sign In instead."
-        onPress={() => navigation.navigate('SignIn')}
-      />
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <Animated.View
+        style={[
+          styles.signUpView,
+          userIsTyping ? { transform: [{ translateY: translation }] } : null,
+        ]}
+      >
+        <Input
+          label="Email"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoCompleteType="email"
+          autoCorrect={false}
+          onFocus={() => translateY(-70)}
+          onEndEditing={() => translateY(0)}
+        />
+        <Input label="Password" secureTextEntry={true} />
+        <Button
+          title="Sign Up"
+          type="clear"
+          onPress={() => navigation.navigate('SignIn')}
+        />
+      </Animated.View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -21,6 +60,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    height: '100%',
+    padding: 50,
   },
 });
 
