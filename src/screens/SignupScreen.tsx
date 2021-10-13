@@ -14,8 +14,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 const Auth = createNativeStackNavigator();
 
 const SignupScreen = ({ navigation }: { navigation: any }) => {
-  const [userIsTyping, setUserIsTyping] = useState(false);
-
   const [translation] = useState(new Animated.Value(0));
 
   const translateY = (y: number) => {
@@ -32,7 +30,7 @@ const SignupScreen = ({ navigation }: { navigation: any }) => {
       <Animated.View
         style={[
           styles.signUpView,
-          userIsTyping ? { transform: [{ translateY: translation }] } : null,
+          { transform: [{ translateY: translation }] },
         ]}
       >
         <Input
@@ -44,7 +42,12 @@ const SignupScreen = ({ navigation }: { navigation: any }) => {
           onFocus={() => translateY(-70)}
           onEndEditing={() => translateY(0)}
         />
-        <Input label="Password" secureTextEntry={true} />
+        <Input
+          label="Password"
+          secureTextEntry={true}
+          onFocus={() => translateY(-70)}
+          onEndEditing={() => translateY(0)}
+        />
         <Button
           title="Sign Up"
           type="clear"
