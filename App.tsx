@@ -1,21 +1,22 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import SigninScreen from './src/screens/SigninScreen';
 
-const Stack = createNativeStackNavigator();
+import { NavigationContainer } from '@react-navigation/native';
 
-export default function App() {
+import HomeScreen from './src/screens/HomeScreen';
+import Auth from './src/routes/Auth';
+
+const App = () => {
+  const [isAuth, setAuth] = useState(false);
+
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Tracks" component={SigninScreen} />
-      </Stack.Navigator>
+      {isAuth && <HomeScreen />}
+      {!isAuth && <Auth />}
     </NavigationContainer>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -25,3 +26,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default App;
